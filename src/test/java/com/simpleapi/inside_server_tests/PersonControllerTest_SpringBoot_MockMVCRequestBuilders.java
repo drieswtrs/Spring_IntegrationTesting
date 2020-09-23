@@ -98,11 +98,7 @@ public class PersonControllerTest_SpringBoot_MockMVCRequestBuilders {
     public void delete_person() throws Exception {
 
         mvc.perform(MockMvcRequestBuilders
-                .delete("/person")
-                .characterEncoding("utf-8")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(karel))
-                .accept(MediaType.APPLICATION_JSON))
+                .delete("/person/{id}", karel.getId()))
                 .andExpect(status().isOk())
                 .andDo(print());
     }

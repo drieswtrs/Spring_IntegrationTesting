@@ -11,7 +11,7 @@ public interface IPersonService {
 
     Person updatePerson(Person person);
 
-    void removePerson(Person person);
+    void removePerson(UUID id);
 
     Collection<Person> findAll();
 

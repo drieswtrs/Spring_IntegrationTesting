@@ -24,8 +24,8 @@ public class PersonService implements IPersonService {
         return this.addPerson(person);
     }
 
-    public void removePerson(Person person) {
-        this.personList.remove(person.getId());
+    public void removePerson(UUID id) {
+        this.personList.remove(id);
     }
 
     public Collection<Person> findAll() {

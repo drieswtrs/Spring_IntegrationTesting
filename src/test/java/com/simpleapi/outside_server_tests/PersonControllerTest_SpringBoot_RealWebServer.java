@@ -49,7 +49,8 @@ public class PersonControllerTest_SpringBoot_RealWebServer {
                 .willReturn(karel);
 
         //when
-        ResponseEntity<Person> response = restTemplate.getForEntity("/person/"+karel.getId(), Person.class);
+        ResponseEntity<Person> response = restTemplate
+                .getForEntity("/person/"+karel.getId(), Person.class);
 
         //then
         assertThat(response.getStatusCode())
@@ -68,7 +69,8 @@ public class PersonControllerTest_SpringBoot_RealWebServer {
                 .willReturn(persons);
 
         //when
-        ResponseEntity<Person[]> response = restTemplate.getForEntity("/person", Person[].class);
+        ResponseEntity<Person[]> response = restTemplate
+                .getForEntity("/person", Person[].class);
 
         //then
         assertThat(response.getStatusCode())
@@ -85,7 +87,8 @@ public class PersonControllerTest_SpringBoot_RealWebServer {
                 .willReturn(karel);
 
         //when
-        ResponseEntity<Person> response = restTemplate.postForEntity("/person", karel, Person.class);
+        ResponseEntity<Person> response = restTemplate
+                .postForEntity("/person", karel, Person.class);
 
         //then
         assertThat(response.getStatusCode())
@@ -120,11 +123,8 @@ public class PersonControllerTest_SpringBoot_RealWebServer {
         //given
 
         //when
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("accept", "application/json");
-        HttpEntity<Person> requestEntity = new HttpEntity<>(karel, headers );
         ResponseEntity<Person> response = restTemplate
-                .exchange("/person", HttpMethod.DELETE, requestEntity, Person.class);
+                .exchange("/person/"+karel.getId(), HttpMethod.DELETE, null, Person.class);
 
         //then
         assertThat(response.getStatusCode())

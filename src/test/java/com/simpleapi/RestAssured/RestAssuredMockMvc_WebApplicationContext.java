@@ -144,9 +144,8 @@ public class RestAssuredMockMvc_WebApplicationContext {
         //when
         MockMvcResponse response = RestAssuredMockMvc
             .given()
-                .body(karel)
             .when()
-                .put("/person");
+                .delete("/person/{id}", karel.getId());
 
         //then
         assertThat(response.getStatusCode())

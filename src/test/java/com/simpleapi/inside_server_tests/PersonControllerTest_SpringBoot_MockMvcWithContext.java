@@ -143,10 +143,7 @@ public class PersonControllerTest_SpringBoot_MockMvcWithContext {
 
         //when
         MockHttpServletResponse response = mvc.perform(
-                delete("/person")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(karel.toJson())
-                        .accept(MediaType.APPLICATION_JSON))
+                delete("/person/{id}", karel.getId()))
                 .andReturn().getResponse();
 
         //then

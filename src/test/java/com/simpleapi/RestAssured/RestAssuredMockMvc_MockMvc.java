@@ -146,9 +146,8 @@ public class RestAssuredMockMvc_MockMvc {
         //when
         MockMvcResponse response = RestAssuredMockMvc
             .given()
-                .body(karel)
-              .when()
-                .delete("/person");
+            .when()
+                .delete("/person/{id}", karel.getId());
 
         //then
         assertThat(response.getStatusCode())

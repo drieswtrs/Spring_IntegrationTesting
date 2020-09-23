@@ -1,28 +1,22 @@
 package com.simpleapi.RestAssured;
 
-import com.simpleapi.controller.PersonController;
 import com.simpleapi.model.Person;
 import com.simpleapi.service.PersonService;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
-import io.restassured.module.mockmvc.RestAssuredMockMvc;
-import io.restassured.module.mockmvc.response.MockMvcResponse;
+import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
-
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.UUID;
 
-import static io.restassured.RestAssured.get;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
-
 
 public class SpringExampleTest_RestAssured {
 
@@ -33,7 +27,7 @@ public class SpringExampleTest_RestAssured {
     Person frank = new Person(UUID.randomUUID(), "frank");
 
     @Before
-    public static void setup() {
+    public void setup() {
         reqSpec = new RequestSpecBuilder()
                 .addHeader("Content-Type", "application/json")
                 .addHeader("Accept", "application/json")
@@ -47,43 +41,14 @@ public class SpringExampleTest_RestAssured {
         RestAssured.responseSpecification = resSpec;
     }
 
-    @org.junit.Test
-    public void get_person_by_id() throws Exception {
-
-        //when
-        // Request under test
-        MockMvcResponse response =
-                RestAssuredMockMvc.get("/person/{id}", karel.getId());
-
-        //then
-        assertThat(response.getStatusCode())
-                .isEqualTo(HttpStatus.OK.value());
-        assertThat(response.body().asString()
-                .replaceAll("\\s+", ""))
-                .isEqualTo(karel.toJson());
-    }
-
-    @org.junit.Test
-    public void get_all_persons() {
-
-        //when
-        MockMvcResponse response =
-                RestAssuredMockMvc.get("/person");
-
-        //then
-        assertThat(response.getStatusCode())
-                .isEqualTo(HttpStatus.OK.value());
-        assertThat(response.getBody().asString())
-                .isEqualTo("["+karel.toJson()+","+frank.toJson()+"]");
-    }
-
-    @org.junit.Test
+    @Test
     public void add_person() {
 
+
         //when
-        MockMvcResponse response = RestAssuredMockMvc
+        Response response = RestAssured
             .given()
-                .body(karel)
+                .body(frank)
             .when()
                 .post("/person");
 
@@ -91,36 +56,84 @@ public class SpringExampleTest_RestAssured {
         assertThat(response.statusCode())
                 .isEqualTo(HttpStatus.OK.value());
 
-        // Will fail
-        // MockMvc does not return response body when put/post/delete/...
         assertThat(response.getBody().asString())
+                .isEqualTo(frank.toJson());
+    }
+
+    @Test
+    public void get_person_by_id() {
+
+        RestAssured
+                .given()
+                .body(karel)
+                .post("/person");
+
+        //when
+        Response response =
+                RestAssured.get("/person/{id}", karel.getId());
+
+        //then
+        assertThat(response.getStatusCode())
+                .isEqualTo(HttpStatus.OK.value());
+
+        assertThat(response.body().asString()
+                .replaceAll("\\s+", ""))
                 .isEqualTo(karel.toJson());
     }
 
-    @org.junit.Test
+    @Test
+    public void get_all_persons() {
+
+        RestAssured
+                .given()
+                .body(karel)
+                .post("/person");
+
+        RestAssured
+                .given()
+                .body(frank)
+                .post("/person");
+
+
+        //when
+        Response response =
+                RestAssured.get("/person");
+
+        //then
+        assertThat(response.getStatusCode())
+                .isEqualTo(HttpStatus.OK.value());
+
+        assertThat(response.getBody().asString())
+                .isEqualTo("["+karel.toJson()+","+frank.toJson()+"]");
+    }
+
+    @Test
     public void update_person() {
 
         //when
-        MockMvcResponse response = RestAssuredMockMvc
+        Response response = RestAssured
             .given()
-                .body(karel)
+                .body(frank)
             .when()
                 .put("/person");
 
         //then
         assertThat(response.getStatusCode())
                 .isEqualTo(HttpStatus.OK.value());
+
+        assertThat(response.body().asString()
+                .replaceAll("\\s+", ""))
+                .isEqualTo(frank.toJson());
     }
 
     @Test
     public void delete_person() {
 
         //when
-        MockMvcResponse response = RestAssuredMockMvc
+        Response response = RestAssured
             .given()
-                .body(karel)
             .when()
-                .delete("/person");
+                .delete("/person/{id}", karel.getId());
 
         //then
         assertThat(response.getStatusCode())

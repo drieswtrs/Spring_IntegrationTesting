@@ -24,13 +24,11 @@ public class PersonController {
 
     @GetMapping("/{person_id}")
     public @ResponseBody Person getPerson(@PathVariable("person_id") UUID id) {
-        System.out.println("Get person by id");
         return personService.findPerson(id);
     }
 
     @GetMapping()
     public @ResponseBody Collection<Person> getAllPersons() {
-        System.out.println("Get all persons");
         return personService.findAll();
     }
 
@@ -44,8 +42,8 @@ public class PersonController {
         return personService.updatePerson(person);
     }
 
-    @DeleteMapping()
-    public void removePerson(@RequestBody Person person) {
-        this.personService.removePerson(person);
+    @DeleteMapping("/{person_id}")
+    public void removePerson(@PathVariable("person_id") UUID id) {
+        this.personService.removePerson(id);
     }
 }
