@@ -82,9 +82,9 @@ public class SpringExampleTest_RestAssured {
 
         //when
         MockMvcResponse response = RestAssuredMockMvc
-                .given()
+            .given()
                 .body(karel)
-                .when()
+            .when()
                 .post("/person");
 
         //then
@@ -102,9 +102,9 @@ public class SpringExampleTest_RestAssured {
 
         //when
         MockMvcResponse response = RestAssuredMockMvc
-                .given()
+            .given()
                 .body(karel)
-                .when()
+            .when()
                 .put("/person");
 
         //then
@@ -117,10 +117,10 @@ public class SpringExampleTest_RestAssured {
 
         //when
         MockMvcResponse response = RestAssuredMockMvc
-                .given()
+            .given()
                 .body(karel)
-                .when()
-                .put("/person");
+            .when()
+                .delete("/person");
 
         //then
         assertThat(response.getStatusCode())

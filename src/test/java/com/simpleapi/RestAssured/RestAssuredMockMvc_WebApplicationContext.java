@@ -143,9 +143,9 @@ public class RestAssuredMockMvc_WebApplicationContext {
 
         //when
         MockMvcResponse response = RestAssuredMockMvc
-                .given()
+            .given()
                 .body(karel)
-                .when()
+            .when()
                 .put("/person");
 
         //then
